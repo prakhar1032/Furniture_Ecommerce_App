@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +10,22 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // Reference to Firestore collection
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('products');
+
+// Add a document to the collection
+  // Future<void> addUser() async {
+  //   return users
+  //       .add({
+  //         'name': 'ee vedeya',
+  //         'email': 'john.doe@example.com',
+  //       })
+  //       .then((value) => print("User added"))
+  //       .catchError((error) => print("Failed to add user: $error"));
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -17,6 +35,34 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
+              // ElevatedButton(
+              //     onPressed: () {
+              //       addUser();
+              //     },
+              //     child: Text('test')),
+              // Container(
+              //   height: 300,
+              //   child: StreamBuilder(
+              //     stream: users.snapshots(),
+              //     builder: (context, snapshot) {
+              //       if (!snapshot.hasData) {
+              //         return CircularProgressIndicator();
+              //       }
+              //       var userDocs = snapshot.data!.docs;
+              //       return ListView.builder(
+              //         itemCount: userDocs.length,
+              //         itemBuilder: (context, index) {
+              //           var userData =
+              //               userDocs[index].data() as Map<String, dynamic>;
+              //           return ListTile(
+              //             title: Text(userData['name']),
+              //             subtitle: Text(userData['email']),
+              //           );
+              //         },
+              //       );
+              //     },
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -215,351 +261,99 @@ class _HomePageState extends State<HomePage> {
                 height: 290,
                 width: MediaQuery.sizeOf(context).width * 0.95,
                 // Set the height of the container
-                child: ListView(
-                  scrollDirection:
-                      Axis.horizontal, // Enable horizontal scrolling
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 60,
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                child: Image.asset(
-                                  'assets/images/product1.png',
-                                  width: 220,
+
+                child: StreamBuilder(
+                  stream: products.snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return CircularProgressIndicator();
+                    }
+                    var userDocs = snapshot.data!.docs;
+                    return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: userDocs.length,
+                      itemBuilder: (context, index) {
+                        var userData =
+                            userDocs[index].data() as Map<String, dynamic>;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Container(
+                            height: 60,
+                            width: 200,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                      child: Image.network(
+                                        '${userData["image"]}',
+                                        width: 200,
+                                        height: 180,
+                                      ),
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    )),
+                                SizedBox(
+                                  height: 10,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Table',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "₹25,000",
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${userData["productName"]}',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500),
                                   ),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 233, 237, 243),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 60,
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                child: Image.asset(
-                                  'assets/images/product2.png',
-                                  width: 220,
                                 ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'chair',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "10,000",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 10, right: 15),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "₹ ${userData["productPrice"]}",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
                                       ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 233, 237, 243),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 60,
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                child: Image.asset(
-                                  'assets/images/product1.png',
-                                  width: 220,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Table',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "₹25,000",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
+                                      Container(
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10)),
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 233, 237, 243),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 60,
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                child: Image.asset(
-                                  'assets/images/product2.png',
-                                  width: 200,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                )),
-                            SizedBox(
-                              height: 10,
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Chair',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "₹10,000",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 233, 237, 243),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Container(
-                        height: 60,
-                        width: 200,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                                child: Image.asset(
-                                  'assets/images/product1.png',
-                                  width: 220,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                )),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Table',
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 15),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "₹25,000",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  Container(
-                                    height: 50,
-                                    width: 50,
-                                    child: Center(
-                                      child: Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 233, 237, 243),
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                            border: Border.all(color: Colors.black, width: 1)),
-                      ),
-                    ),
-                  ],
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 233, 237, 243),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                                border:
+                                    Border.all(color: Colors.black, width: 1)),
+                          ),
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],

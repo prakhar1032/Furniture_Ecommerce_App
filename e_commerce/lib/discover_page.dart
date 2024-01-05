@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverPage extends StatefulWidget {
@@ -8,6 +9,8 @@ class DiscoverPage extends StatefulWidget {
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
+  CollectionReference categories =
+      FirebaseFirestore.instance.collection('category');
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -349,177 +352,72 @@ class _DiscoverPageState extends State<DiscoverPage> {
               height: 15,
             ),
             Container(
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 239, 241, 244),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    width: 0.5,
-                    color: Colors.black,
-                  )),
-              width: MediaQuery.sizeOf(context).width * 0.9,
-              height: 90,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Table',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '3 products',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
+              height: 500,
+              child: StreamBuilder(
+                stream: categories.snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return CircularProgressIndicator();
+                  }
+
+                  var userDocs = snapshot.data!.docs;
+                  return ListView.builder(
+                    itemCount: userDocs.length,
+                    itemBuilder: (context, index) {
+                      var userData =
+                          userDocs[index].data() as Map<String, dynamic>;
+
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Container(
+                          height: 100,
+                          width: MediaQuery.sizeOf(context).width * 0.95,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.black,
+                              )),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${userData["productName"]}',
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      '${userData["productCount"]} products',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Image.network(
+                                '${userData["image"]}',
+                                width: 110,
+                              )
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Image.asset('assets/images/table2.png')
-                ],
+                      );
+                    },
+                  );
+                },
               ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 239, 241, 244),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    width: 0.5,
-                    color: Colors.black,
-                  )),
-              width: MediaQuery.sizeOf(context).width * 0.9,
-              height: 90,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Sofa',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '3 products',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Image.asset('assets/images/sofa.png')
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 239, 241, 244),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    width: 0.5,
-                    color: Colors.black,
-                  )),
-              width: MediaQuery.sizeOf(context).width * 0.9,
-              height: 90,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Chair',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '3 products',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Image.asset(
-                    'assets/images/image.png',
-                    width: 165,
-                  )
-                ],
-              ),
-            ),
-            SizedBox(height: 15),
-            Container(
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 239, 241, 244),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(
-                    width: 0.5,
-                    color: Colors.black,
-                  )),
-              width: MediaQuery.sizeOf(context).width * 0.9,
-              height: 90,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Sofa',
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '3 products',
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Image.asset('assets/images/sofa.png')
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 10,
             ),
           ],
         ),

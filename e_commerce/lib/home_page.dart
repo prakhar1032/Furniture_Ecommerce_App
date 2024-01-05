@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce/cart_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -35,52 +36,34 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(15.0),
           child: Column(
             children: [
-              // ElevatedButton(
-              //     onPressed: () {
-              //       addUser();
-              //     },
-              //     child: Text('test')),
-              // Container(
-              //   height: 300,
-              //   child: StreamBuilder(
-              //     stream: users.snapshots(),
-              //     builder: (context, snapshot) {
-              //       if (!snapshot.hasData) {
-              //         return CircularProgressIndicator();
-              //       }
-              //       var userDocs = snapshot.data!.docs;
-              //       return ListView.builder(
-              //         itemCount: userDocs.length,
-              //         itemBuilder: (context, index) {
-              //           var userData =
-              //               userDocs[index].data() as Map<String, dynamic>;
-              //           return ListTile(
-              //             title: Text(userData['name']),
-              //             subtitle: Text(userData['email']),
-              //           );
-              //         },
-              //       );
-              //     },
-              //   ),
-              // ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Image.asset('assets/images/umah.png'),
-                    Container(
-                      height: 50,
-                      width: 50,
-                      child: Center(
-                        child: Icon(Icons.shopping_basket),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CartPage()), // Replace with your main screen
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        width: 50,
+                        child: Center(
+                          child: Icon(Icons.shopping_basket),
+                        ),
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 239, 241, 244),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: Border.all(
+                              color: Colors.black,
+                            )),
                       ),
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 239, 241, 244),
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(
-                            color: Colors.black,
-                          )),
                     )
                   ],
                 ),
@@ -94,6 +77,113 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(15)),
                   color: Color(0xFF1D2A44),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.account_balance_wallet,
+                          size: 30,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Wallet',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                            Text(
+                              '₹ 2,700',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[300],
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Icon(
+                          Icons.badge,
+                          size: 30,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Points',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                            Text(
+                              '4,500',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[300],
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 15,
+                        ),
+                        Icon(
+                          Icons.discount,
+                          size: 30,
+                          color: Colors.orange,
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Vouchers',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey[500],
+                              ),
+                            ),
+                            Text(
+                              '2',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey[300],
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
               SizedBox(
@@ -173,7 +263,10 @@ class _HomePageState extends State<HomePage> {
                         height: 60,
                         width: 60,
                         child: Center(
-                          child: Icon(Icons.chair),
+                          child: Image.asset(
+                            "assets/images/cabinet.png",
+                            width: 23,
+                          ),
                         ),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 239, 241, 244),
@@ -187,7 +280,10 @@ class _HomePageState extends State<HomePage> {
                         height: 60,
                         width: 60,
                         child: Center(
-                          child: Icon(Icons.chair),
+                          child: Image.asset(
+                            "assets/images/table-lamp.png",
+                            width: 25,
+                          ),
                         ),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 239, 241, 244),
@@ -201,7 +297,10 @@ class _HomePageState extends State<HomePage> {
                         height: 60,
                         width: 60,
                         child: Center(
-                          child: Icon(Icons.chair),
+                          child: Image.asset(
+                            "assets/images/wardrobe.png",
+                            width: 25,
+                          ),
                         ),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 239, 241, 244),
@@ -215,7 +314,10 @@ class _HomePageState extends State<HomePage> {
                         height: 60,
                         width: 60,
                         child: Center(
-                          child: Icon(Icons.chair),
+                          child: Image.asset(
+                            "assets/images/cabinet.png",
+                            width: 23,
+                          ),
                         ),
                         decoration: BoxDecoration(
                           color: Color.fromARGB(255, 239, 241, 244),
